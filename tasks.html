@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>timeInspector: My Tasks</title>
+    <script src="jquery.min.js"></script>
+    <link href="bulma.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title is-1"> TimeInspector </h1>
+        <main>
+            <section class="section">
+                <div class="message is-primary ">
+                    <div class="message-header">
+                        <div class="card-header-title is-size-3"> Neue Aufgabe: </div>
+                    </div>
+
+                    <div class="message-body">
+                        <form id="subForm">
+
+                            <div class="field" class="is-size-1">
+                                <label class="label">Aufgabenname</label>
+                                <div class="control">
+                                    <input id="name_task" class="input" type="text">
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Beschreibung der Aufgabe</label>
+                                <div class="control">
+                                    <textarea id="description_task" class="textarea"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="control">
+                                <button id="btn" class="button">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="message is-link">
+                    <div class="message-header">
+                        <div class="card-header-title is-size-3"> Aufgabenübersicht: <span id="totalTime"> </span></div>
+                    </div>
+                    <div class="message-body">
+                        <table class="table is-hoverable is-fullwidth has-text-centered table-green" id="aufgaben_tabelle">
+                            <tr>
+                                <th>Aufgabenname</th>
+                                <th>Beschreibung der Aufgabe</th>
+                                <th>Gesamtzeit</th>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <p>
+                <a href="efforts.html"> bring mich zu den Aufwänden</a>
+            </p>
+        </main>
+    </div>
+</body>
+
+<script>
+    fetchTasks();
+
+    // on start load the data and populate the table with data
+    function fetchTasks() {
+        $.get("/api/tasks", function (newTasks) {
+            setTotalTask(newTasks);
+            populateTable(newTasks); //über alle task gehen, amount hours duration for each 
+        });
+    }
+
+    function setTotalTask(tasks) {
+        var taskTotal = 0;
+        for (var i = 0; i < tasks.length; i++) {
+            taskTotal += tasks[i].durationTotal;;
+        }
+        $("#totalTime").text(taskTotal);
+    }
+
+    // PopulateData takes data and populates the table with it
+    function populateTable(newTasks) {
+        $("tr").remove(".zeile_inhalt");
+
+        var task_data;
+        $.each(newTasks, function (key, value) {
+            task_data += '<tr  class="zeile_inhalt">';
+            task_data += '<td>   <a href="efforts.html?id=' + value.id + '">' + value.name + '</a></td>';
+            task_data += '<td>' + value.description + '</td>';
+            task_data += '<td>' + value.durationTotal + '</td>';
+            task_data += '</tr>';
+        });
+        $('#aufgaben_tabelle').append(task_data);
+    }
+
+    // saveNewTask takes data from input fields and saves new task 
+    function saveNewTask() {
+        var name = $("#name_task").val();
+        var desc = $("#description_task").val();
+        if (name == "") return;
+
+        var newItem = {
+            name: name,
+            description: desc,
+            durationTotal: 0
+        };
+
+        var json = JSON.stringify(newItem);
+        $.ajax({
+            type: 'POST',
+            url: "/api/tasks",
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify(newItem),
+            success: function () {
+                // 1. lösche werte in eingabe felder
+                $("#subForm").trigger("reset");
+
+                fetchTasks();
+            }
+        });
+    }
+
+    $("#btn").click(function (event) {
+        event.preventDefault();
+        saveNewTask();
+    });
+
+</script>
+
+</html>

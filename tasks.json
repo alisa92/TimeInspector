@@ -1,0 +1,118 @@
+[
+    {
+        "id": "aufgabe_1",
+        "name": "Prüfungsvorbereitung",
+        "description": "Beschreibung der Aufgabe .... ",
+        "efforts": [
+            {
+                "description": "Fachliteratur lesen",
+                "date": "27.11.2017",
+                "amount": 4
+            },
+            {
+                "description": "Programmieren ",
+                "date": "25.11.2017",
+                "amount": 2
+            }
+        ],
+        "durationTotal": 6
+    },
+    {
+        "id": "aufgabe_2",
+        "name": "Weihnachtsbaum schmücken",
+        "description": "Beschreibung der Aufgabe .... ",
+        "efforts": [
+            {
+                "description": "Baum kaufen",
+                "date": "23.12.2017",
+                "amount": 0.5
+            },
+            {
+                "description": "Lichter anbringen",
+                "date": "23.12.2017",
+                "amount": 0.5
+            },
+            {
+                "description": "Kugeln aufhängen",
+                "date": "23.12.2017",
+                "amount": 0.75
+            }
+        ],
+        "durationTotal": 1.75
+    },
+    {
+        "id": "aufgabe_3",
+        "name": "Plätzchen backen",
+        "description": "Beschreibung der Aufgabe .... ",
+        "efforts": [
+            {
+                "description": "Teig vorbereiten",
+                "date": "23.12.2017",
+                "amount": 1
+            },
+            {
+                "description": "Plätzchen ausstrechen",
+                "date": "23.12.2017",
+                "amount": 1
+            },
+            {
+                "description": "Plätzchen verzieren",
+                "date": "23.12.2017",
+                "amount": 2.5
+            }
+        ],
+        "durationTotal": 4.5
+    },
+    {
+        "id": "aufgabe_4",
+        "name": "Glühwein kochen",
+        "description": "Beschreibung der Aufgabe .... ",
+        "efforts": [
+            {
+                "description": "Gewürze und Wein kaufen",
+                "date": "23.12.2017",
+                "amount": 2.5
+            },
+            {
+                "description": "vorbereiten",
+                "date": "23.12.2017",
+                "amount": 1
+            },
+            {
+                "description": "Glühwein aufkochen",
+                "date": "23.12.2017",
+                "amount": 0.5
+            }
+        ],
+        "durationTotal": 4
+    },
+    {
+        "name": "test",
+        "description": "test",
+        "durationTotal": 0,
+        "id": "aufgabe_5"
+    },
+    {
+        "name": "Demo",
+        "description": "1231212312",
+        "durationTotal": 136,
+        "id": "aufgabe_7",
+        "efforts": [
+            {
+                "description": "asdasdasdasd",
+                "date": "2017-01-01",
+                "amount": 12
+            },
+            {
+                "description": "ein weiterer Aufwand",
+                "date": "2017-02-01",
+                "amount": 1
+            },
+            {
+                "description": "demo2",
+                "date": "2017-02-12",
+                "amount": 123
+            }
+        ]
+    }
+]

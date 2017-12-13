@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>timeInspector: My Effort</title>
+    <script src="jquery.min.js"></script>
+    <link href="bulma.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title is-1"> TimeInspector </h1>
+        <main>
+            <section class="section">
+                <div class="message is-primary ">
+                    <div class="message-header">
+                        <div class="card-header-title is-size-3"> Neuer Aufwand: <span id="title"></span></div>
+                    </div>
+
+                    <div class="message-body">
+                        <form id="subForm">
+
+                            <div class="field" class="is-size-1">
+                                <label class="label">Aufwandsbezeichnung</label>
+                                <div class="control">
+                                    <input id="name_effort" class="input" type="text">
+                                </div>
+                            </div>
+
+                            <div class="field" class="is-size-1">
+                                <label class="label">Datum</label>
+                                <div class="control">
+                                    <input class="input" type="date" id="date_effort">
+                                </div>
+                            </div>
+
+                            <div class="field" class="is-size-1">
+                                <label class="label">Zeit</label>
+                                <div class="control">
+                                    <input class="time" type="number" id="time_effort">
+                                </div>
+                            </div>
+
+
+                            <div class="control">
+                                <button id="btn" class="button">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="message is-link">
+                    <div class="message-header">
+                        <div class="card-header-title is-size-3"> Aufwandsübersicht: <span id="totalEfforts"></span> </div>
+                    </div>
+                    <div class="message-body">
+                        <table class="table is-hoverable is-fullwidth has-text-centered table-green" id="aufwand_tabelle2">
+                            <tr>
+                                <th>Aufwandsbezeichnung</th>
+                                <th>Datum</th>
+                                <th>Zeit</th>
+                            </tr>
+
+                        </table>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <p>
+                <a href="tasks.html"> bring mich zur Aufgabenseite zurück</a>
+            </p>
+
+        </main>
+    </div>
+</body>
+
+<script>
+    var queryParameter = new URLSearchParams(window.location.search);
+    var taskId = queryParameter.get('id');
+    fetchTask(taskId);
+
+
+    $("#btn").click(function (event) {
+        event.preventDefault();
+        saveNewEffort(taskId);
+    });
+
+    function fetchTask(id) {
+        $.get("/api/tasks/" + id, function (newTask) {
+
+            var taskTitle = newTask.name;
+            setTaskTitle(taskTitle);
+            setEfforts(newTask.durationTotal);
+
+            var efforts = newTask.efforts;
+            populateTable(efforts);
+        });
+    }
+
+
+    function setTaskTitle(title) {
+        $("#title").text(title);
+    }
+
+    function setEfforts(totalEfforts) {
+        $("#totalEfforts").text(totalEfforts);
+    }
+
+    function populateTable(efforts) {
+        $("tr").remove(".zeile_inhalt");
+        var task_data;
+        $.each(efforts, function (key, value) {
+            task_data += '<tr  class="zeile_inhalt">';
+            task_data += '<td>' + value.description + '</td>';
+            task_data += '<td>' + value.date + '</td>';
+            task_data += '<td>' + value.amount + '</td>';
+            task_data += '</tr>';
+        });
+        $('#aufwand_tabelle2').append(task_data);
+    }
+
+    function saveNewEffort() {
+        var name = $("#name_effort").val();
+        var date = $("#date_effort").val();
+        var time = $("#time_effort").val();
+        if (name == "") return;
+
+        var newItem = {
+            name: name,
+            date: date,
+            time: time
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: "/api/tasks/" + taskId,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify(newItem),
+            success: function () {
+                // 1. lösche werte in eingabe felder
+                $("#subForm").trigger("reset");
+
+                fetchTask(taskId);
+            }
+        });
+    }
+
+</script>
+
+</html>
